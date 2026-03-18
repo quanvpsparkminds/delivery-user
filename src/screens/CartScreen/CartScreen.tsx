@@ -11,19 +11,22 @@ import { palette, spacing, style } from "theme";
 import { STextStyle, SViewStyle } from "types";
 import { hexToRgbA, symbol } from "utils";
 import * as Components from "./components";
+import { useAppNavigation } from "navigators";
 import {
   clearCart,
-  removeFromCart,
   selectCartItems,
   TCartItem,
 } from "store/slices/CartSlice";
 import { selectLocation } from "store/slices/LocationSlice";
 
+
 export const CartScreen = () => {
+  const navigation = useAppNavigation();
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector(selectCartItems);
   const location = useAppSelector(selectLocation);
   const { mutate: createOrder, isPending } = useCreateOrderMutation();
+
 
   const groupedCarts = useMemo(() => {
     const groups = cartItems.reduce((acc, item) => {
@@ -97,16 +100,13 @@ export const CartScreen = () => {
         lat: location.lat.toString(),
         lng: location.long.toString(),
         deliveryFee: firstItem.fee || 0,
-        deliveryAddress: location.address || "",
-        address: location.address || "",
+        deliveryAddress: location.address || "ádasd",
+        address: location.address || "ádds",
       },
       {
         onSuccess: (response) => {
-          Alert.alert(
-            "Order Success",
-            `Total: ${symbol}${response.data.totalPrice}\nFee: ${symbol}${response.data.fee}`
-          );
           dispatch(clearCart());
+          navigation.navigate("FindingDriver");
         },
         onError: (error: any) => {
           Alert.alert("Order Failed", error?.message || "Something went wrong");

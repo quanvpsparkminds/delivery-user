@@ -1,3 +1,5 @@
+import Config from "react-native-config";
+
 export const getImage = (url: string) => {
-  return `http://localhost:8080/uploads/${url}`;
+  return `${Config.BASE_URL}/uploads/${url}`;
 };

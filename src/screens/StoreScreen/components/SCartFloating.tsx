@@ -1,10 +1,6 @@
 import { images } from "@assets/index";
 import { AppButton, AppModal, AppText } from "components";
-import {
-  useAppDispatch,
-  useAppSelector,
-  useCreateOrderMutation,
-} from "hooks";
+import { useAppDispatch, useAppSelector, useCreateOrderMutation } from "hooks";
 import React, { useMemo, useState } from "react";
 import { Alert, Image, Pressable, ScrollView, View } from "react-native";
 import { spacing, style, palette } from "theme";
@@ -16,11 +12,14 @@ import { selectLocation } from "store/slices/LocationSlice";
 import { TRestaurant } from "services";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { useAppNavigation } from "navigators";
+
 type Props = {
   restaurant: TRestaurant;
 };
 
 export const SCartFloating: React.FC<Props> = ({ restaurant }) => {
+  const navigation = useAppNavigation();
   const dispatch = useAppDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const cartItems = useAppSelector(selectCartItems);
@@ -30,22 +29,25 @@ export const SCartFloating: React.FC<Props> = ({ restaurant }) => {
 
   const restaurantCartItems = useMemo(
     () => cartItems.filter((i) => i.restaurantId === restaurant.id),
-    [cartItems, restaurant.id]
+    [cartItems, restaurant.id],
   );
 
   if (restaurantCartItems.length === 0) return null;
 
-  const totalCount = restaurantCartItems.reduce((acc, i) => acc + i.quantity, 0);
+  const totalCount = restaurantCartItems.reduce(
+    (acc, i) => acc + i.quantity,
+    0,
+  );
   const totalPrice = restaurantCartItems.reduce(
     (acc, i) => acc + i.price * i.quantity,
-    0
+    0,
   );
 
   const handleCheckout = () => {
     if (restaurantCartItems.length === 0) return;
 
     const itemsToOrder = restaurantCartItems.flatMap((item) =>
-      Array(item.quantity).fill({ idMenu: item.id })
+      Array(item.quantity).fill({ idMenu: item.id }),
     );
 
     createOrder(
@@ -55,22 +57,19 @@ export const SCartFloating: React.FC<Props> = ({ restaurant }) => {
         lat: location.lat.toString(),
         lng: location.long.toString(),
         deliveryFee: restaurant.route?.fee || 0,
-        deliveryAddress: location.address || "",
-        address: location.address || "",
+        deliveryAddress: location.address || "undefined",
+        address: location.address || "undefined",
       },
       {
         onSuccess: (response) => {
-          Alert.alert(
-            "Order Success",
-            `Total: ${symbol}${response.data.totalPrice}\nFee: ${symbol}${response.data.fee}`
-          );
           dispatch(clearCart());
           setModalVisible(false);
+          navigation.navigate("FindingDriver");
         },
         onError: (error: any) => {
           Alert.alert("Order Failed", error?.message || "Something went wrong");
         },
-      }
+      },
     );
   };
 
@@ -112,18 +111,19 @@ export const SCartFloating: React.FC<Props> = ({ restaurant }) => {
 
           <View style={$section}>
             <AppText children="Cửa hàng" style={$label} />
-            <AppText children={restaurant.fullName} style={style.tx_font_bold} />
+            <AppText
+              children={restaurant.fullName}
+              style={style.tx_font_bold}
+            />
             <AppText children={restaurant.address} />
             <View style={[style.row, style.mt_xs]}>
               <AppText
                 children={`Khoảng cách: ${restaurant.route?.distance?.toFixed(
-                  2
+                  2,
                 )} km`}
                 style={style.mr_md}
               />
-              <AppText
-                children={`Phí: ${symbol}${restaurant.route?.fee}`}
-              />
+              <AppText children={`Phí: ${symbol}${restaurant.route?.fee}`} />
             </View>
           </View>
 
@@ -132,12 +132,21 @@ export const SCartFloating: React.FC<Props> = ({ restaurant }) => {
           {restaurantCartItems.map((item) => (
             <View
               key={item.id}
-              style={[style.row, style.justify_between, style.my_xs, style.align_center]}
+              style={[
+                style.row,
+                style.justify_between,
+                style.my_xs,
+                style.align_center,
+              ]}
             >
               <View style={[style.row, style.align_center]}>
-                <Image 
-                  source={item.image ? { uri: getImage(item.image) } : images.icon_star} 
-                  style={[$imgItem, style.mr_xs]} 
+                <Image
+                  source={
+                    item.image
+                      ? { uri: getImage(item.image) }
+                      : images.icon_star
+                  }
+                  style={[$imgItem, style.mr_xs]}
                 />
                 <View>
                   <AppText children={item.name} style={style.tx_font_medium} />
@@ -147,7 +156,10 @@ export const SCartFloating: React.FC<Props> = ({ restaurant }) => {
                   />
                 </View>
               </View>
-              <AppText children={`${symbol}${item.price * item.quantity}`} style={style.tx_font_bold} />
+              <AppText
+                children={`${symbol}${item.price * item.quantity}`}
+                style={style.tx_font_bold}
+              />
             </View>
           ))}
 

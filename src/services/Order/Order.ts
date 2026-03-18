@@ -8,4 +8,17 @@ const createOrder = async (
   return await api.post<TOrderResponse>("/orders", data);
 };
 
-export const orderApi = { createOrder };
+const getOrders = async (): Promise<ApiResponse<TOrderResponse[]>> => {
+  return await api.get<TOrderResponse[]>("/orders");
+};
+
+const findShipper = async (id: string): Promise<ApiResponse<any>> => {
+  return await api.post<any>(`/orders/${id}/shipper`, {});
+};
+
+const getOrderDetail = async (id: string): Promise<ApiResponse<TOrderResponse>> => {
+  return await api.get<TOrderResponse>(`/orders/${id}`);
+};
+
+export const orderApi = { createOrder, getOrders, findShipper, getOrderDetail };
+

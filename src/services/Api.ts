@@ -15,7 +15,7 @@ import * as AxiosLogger from "axios-logger";
 const DEFAULT_TIMEOUT = 100000;
 
 const config: CreateAxiosDefaults = {
-  baseURL: __DEV__ ? "http://localhost:8080/api/" : Config.BASE_URL,
+  baseURL: `${Config.BASE_URL}/api/`,
   timeout: DEFAULT_TIMEOUT,
   headers: {
     "Content-Type": "application/json",
@@ -49,7 +49,7 @@ class Api {
 
         return config;
       },
-      (error) => Promise.reject(error)
+      (error) => Promise.reject(error),
     );
 
     // Response interceptor
@@ -75,7 +75,7 @@ class Api {
               "An unknown error occurred",
           }),
         });
-      }
+      },
     );
   }
 
@@ -101,7 +101,7 @@ class Api {
   async post<T>(
     url: string,
     data?: any,
-    config?: any
+    config?: any,
   ): Promise<ApiResponse<T>> {
     const response = await this._axios.post(url, data, config);
     return this._formatResponse<T>(response);
@@ -115,7 +115,7 @@ class Api {
   async patch<T>(
     url: string,
     data?: any,
-    config?: any
+    config?: any,
   ): Promise<ApiResponse<T>> {
     const response = await this._axios.patch(url, data, config);
     return this._formatResponse<T>(response);
@@ -149,11 +149,11 @@ class Api {
     if (__DEV__) {
       this._axios.interceptors.request.use(
         AxiosLogger.requestLogger,
-        AxiosLogger.errorLogger
+        AxiosLogger.errorLogger,
       );
       this._axios.interceptors.response.use(
         AxiosLogger.responseLogger,
-        AxiosLogger.errorLogger
+        AxiosLogger.errorLogger,
       );
     }
   }

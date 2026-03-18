@@ -8,9 +8,11 @@ import { useAppSelector } from "hooks";
 import {
   CartScreen,
   FetchingScreen,
+  FindingDriverScreen,
   LanguageScreen,
   MapScreen,
   NotificationScreen,
+  OrderDetailScreen,
   SignInScreen,
   StoreScreen,
 } from "screens";
@@ -44,6 +46,11 @@ export const AppStack = createNativeStackNavigator({
         Store: {
           screen: StoreScreen,
           params: { id: 0 as number | string },
+        },
+        FindingDriver: FindingDriverScreen,
+        OrderDetail: {
+          screen: OrderDetailScreen,
+          params: { id: "" },
         },
       },
     },

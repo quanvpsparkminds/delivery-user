@@ -7,3 +7,14 @@ export type TLogin = {
 export type TLoginResponse = {
   token: string;
 };
+
+export type TUser = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  birthday: string | null;
+  phoneCode: string;
+  phoneNumber: string;
+  image: string | null;
+};
