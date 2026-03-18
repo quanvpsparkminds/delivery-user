@@ -123,7 +123,11 @@ export const SCartFloating: React.FC<Props> = ({ restaurant }) => {
                 )} km`}
                 style={style.mr_md}
               />
-              <AppText children={`Phí: ${symbol}${restaurant.route?.fee}`} />
+              <AppText
+                children={`Phí: ${symbol}${(restaurant.route?.fee || 0).toFixed(
+                  1,
+                )}`}
+              />
             </View>
           </View>
 
@@ -167,7 +171,9 @@ export const SCartFloating: React.FC<Props> = ({ restaurant }) => {
           <View style={[style.row, style.justify_between, style.mb_md]}>
             <AppText children="Tổng cộng" style={style.tx_font_bold} />
             <AppText
-              children={`${symbol}${totalPrice + (restaurant.route?.fee || 0)}`}
+              children={`${symbol}${
+                totalPrice + Number((restaurant.route?.fee || 0).toFixed(1))
+              }`}
               style={style.tx_font_bold}
             />
           </View>

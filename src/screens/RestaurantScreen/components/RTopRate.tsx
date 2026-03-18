@@ -6,6 +6,7 @@ import { spacing, style } from "theme";
 import { images } from "@assets/index";
 import { useAppNavigation } from "navigators";
 import { useRestaurantQuery } from "hooks";
+import { getImage } from "utils/Image";
 
 export const RTopRate = () => {
   const navigation = useAppNavigation();
@@ -32,7 +33,11 @@ export const RTopRate = () => {
             onPress={() => navigation.navigate("Store", { id: item.id })}
           >
             {item.image ? (
-              <Image source={{ uri: item.image }} style={$img} />
+              <Image
+                source={{ uri: getImage(item.image) }}
+                style={$img}
+                resizeMode="contain"
+              />
             ) : (
               <View style={[$img, $imgPlaceholder]}>
                 <Image source={images.icon_star} />

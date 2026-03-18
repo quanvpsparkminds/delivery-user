@@ -96,6 +96,7 @@ export const SBody: React.FC<Props> = ({ onScroll, restaurant }) => {
                 <Image
                   source={{ uri: getImage(item.image) }}
                   style={$imgDish}
+                  resizeMode="contain"
                 />
               ) : (
                 <View style={[$imgDish, $imgPlaceholder]}>

@@ -14,12 +14,9 @@ export const useSocket = () => {
     const socket = new SockJS("http://localhost:8080/ws");
     const client = Stomp.over(socket);
     client.connect({}, () => {
-      console.log("+_+_dkskjdl");
-
       setStompClient(client);
     });
   };
-  console.log(user?.id);
   //initial socket
   useEffect(() => {
     connect();
@@ -27,12 +24,10 @@ export const useSocket = () => {
 
   useEffect(() => {
     if (!stompClient) {
-      console.log("no stompClient");
       return;
     }
-    console.log("+_+_+_+_+_+_+_+");
 
-    stompClient?.subscribe(`/topic/user/1`, (message: any) => {
+    stompClient?.subscribe(`/topic/user/${user?.id}`, (message: any) => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
     });
   }, [stompClient, user?.id]);

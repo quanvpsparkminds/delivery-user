@@ -56,6 +56,7 @@ export const SHeader: React.FC<Props> = ({ scrollPoint, restaurant }) => {
             transform: [{ translateY }],
           },
         ]}
+        resizeMode="cover"
       />
 
       {/* Header cố định */}
