@@ -123,6 +123,9 @@ export const en = {
     delivery: "Delivery",
     arrive: "Arrive {{minutes}}min ({{about}} mi)",
   },
+  notification: {
+    markAllRead: "Mark all as read",
+  },
 };
 
 export type TTranslations = typeof en;

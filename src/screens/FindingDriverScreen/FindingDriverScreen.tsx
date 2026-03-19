@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { View, Image, Pressable, StyleSheet, Dimensions } from "react-native";
-import MapView, { Marker } from "react-native-maps";
-import LottieView from "lottie-react-native";
-import { AppText, Layout, AppModal } from "components";
-import { useOrdersQuery, useFindShipperMutation } from "hooks";
-import { useAppNavigation } from "navigators";
-import { style, spacing, palette } from "theme";
-import { STextStyle, SViewStyle } from "types";
 import { images } from "@assets/index";
 import { lotties } from "@assets/lotties";
+import { AppText, Layout } from "components";
+import { useFindShipperMutation, useOrdersQuery } from "hooks";
+import LottieView from "lottie-react-native";
+import { useAppNavigation } from "navigators";
+import React, { useEffect, useState } from "react";
+import { Dimensions, Image, StyleSheet, View } from "react-native";
+import MapView, { Marker } from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { palette, spacing, style } from "theme";
 import { scaleFontSize } from "theme/Spacing";
+import { STextStyle } from "types";
 
 const { width, height } = Dimensions.get("window");
 
@@ -46,12 +46,11 @@ export const FindingDriverScreen = () => {
     };
   }, [order, findShipper, refetchOrders]);
 
-  const handleGoToDetail = () => {
-    setModalVisible(false);
-    if (order) {
+  useEffect(() => {
+    if (order?.status === "CONFIRMED") {
       navigation.replace("OrderDetail", { id: order.id });
     }
-  };
+  }, [order]);
 
   const handleCancel = () => {
     // For now, just go back, since we don't have a specific cancel API yet
@@ -165,28 +164,6 @@ export const FindingDriverScreen = () => {
           /> */}
         </View>
       </View>
-
-      <AppModal visible={modalVisible} onRequestClose={() => {}}>
-        <View style={style.p_md}>
-          <AppText style={$modalTitle} children="Đã tìm thấy tài xế!" />
-          <AppText
-            style={style.mb_md}
-            children={`Tài xế ${order?.delivery?.firstName} ${order?.delivery?.lastName} đã nhận đơn hàng của bạn.`}
-          />
-          <Pressable
-            style={[
-              styles.cancelButton,
-              { backgroundColor: palette.primary500 },
-            ]}
-            onPress={handleGoToDetail}
-          >
-            <AppText
-              style={[styles.cancelText, { color: palette.white }]}
-              children="Xem chi tiết đơn hàng"
-            />
-          </Pressable>
-        </View>
-      </AppModal>
     </Layout>
   );
 };

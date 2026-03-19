@@ -8,7 +8,7 @@ import { palette, spacing, style } from "theme";
 import { SImageStyle, STextStyle, SViewStyle } from "types";
 import { hexToRgbA } from "utils";
 import { AppText } from "../AppText";
-import { useAppSelector } from "hooks";
+import { useAppSelector, useNotificationQuery } from "hooks";
 import { selectAddress } from "store/slices/LocationSlice";
 
 const banners = [images.banner_1, images.banner_2];
@@ -25,6 +25,9 @@ export const Banner = () => {
     });
   };
 
+  const { data: notifications } = useNotificationQuery();
+  const unreadCount = notifications?.filter((n) => !n.isSeen).length ?? 0;
+
   const handleNotification = () => navigation.navigate("Notification");
   const handleCart = () => navigation.navigate("Cart");
 
@@ -39,6 +42,13 @@ export const Banner = () => {
         <View style={style.flex_1} />
         <Pressable style={$rounded} onPress={handleNotification}>
           <Image source={images.icon_bell} />
+          {unreadCount > 0 && (
+            <View style={$badge}>
+              <AppText style={$badgeText}>
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </AppText>
+            </View>
+          )}
         </Pressable>
         <Pressable style={$rounded} onPress={handleCart}>
           <Image source={images.icon_cart} />
@@ -114,4 +124,26 @@ const $rounded: SViewStyle = [
   style.center,
   style.bg_color_white,
   { width: HEIGHT_LOCATION, height: HEIGHT_LOCATION },
+];
+
+const $badge: SViewStyle = [
+  style.abs,
+  style.bg_color_error600,
+  style.center,
+  {
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    right: -2,
+    top: -2,
+    borderWidth: 1.5,
+    borderColor: palette.white,
+    paddingHorizontal: 2,
+  },
+];
+
+const $badgeText: STextStyle = [
+  style.tx_color_white,
+  style.tx_font_bold,
+  { fontSize: 10, lineHeight: 10 },
 ];
