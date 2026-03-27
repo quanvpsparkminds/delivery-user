@@ -120,7 +120,7 @@ export const vi: TTranslations = {
   },
   store: {
     delivery: "Giao hàng",
-    arrive: "Đến nơi {{minutes}}phút ({{about}} mi)",
+    arrive: "Đến nơi {{minutes}}phút ({{about}} km)",
   },
   notification: {
     markAllRead: "Đánh dấu tất cả đã đọc",

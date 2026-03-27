@@ -1,6 +1,4 @@
-import {
-  createBottomTabNavigator
-} from "@react-navigation/bottom-tabs";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StaticParamList } from "@react-navigation/native";
 import { AppBottomTabbar } from "components";
 import React from "react";
@@ -17,9 +15,9 @@ export const AppTabbarNavigator = createBottomTabNavigator({
   tabBar: (props) => <AppBottomTabbar {...props} />,
   screens: {
     Restaurant: RestaurantScreen,
-    Grocery: GroceryScreen,
-    Shopping: ShoppingScreen,
-    Search: SearchScreen,
+    // Grocery: GroceryScreen,
+    // Shopping: ShoppingScreen,
+    // Search: SearchScreen,
     Account: AccountScreen,
   },
 });

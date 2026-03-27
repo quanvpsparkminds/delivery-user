@@ -16,21 +16,13 @@ import { TRestaurant } from "services";
 import { getImage } from "utils/Image";
 
 type Props = {
-  scrollPoint: NativeScrollPoint;
+  scrollY: Animated.Value;
   restaurant: TRestaurant;
 };
 
-export const SHeader: React.FC<Props> = ({ scrollPoint, restaurant }) => {
+export const SHeader: React.FC<Props> = ({ scrollY, restaurant }) => {
   const { top } = useSafeAreaInsets();
   const navigation = useAppNavigation();
-
-  // animated value
-  const scrollY = useRef(new Animated.Value(0)).current;
-
-  // cập nhật animation mỗi lần scrollPoint.y thay đổi
-  useEffect(() => {
-    scrollY.setValue(scrollPoint.y);
-  }, [scrollPoint.y]);
 
   const IMAGE_HEIGHT = 340;
 

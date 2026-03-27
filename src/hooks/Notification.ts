@@ -8,7 +8,6 @@ export const useNotificationQuery = () => {
       const response = await notificationApi.getNotifications();
       return response.data;
     },
-    refetchInterval: 10000,
   });
 };
 

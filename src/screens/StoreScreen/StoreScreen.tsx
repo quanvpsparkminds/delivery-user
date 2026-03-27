@@ -3,7 +3,7 @@ import { AppText, Layout } from "components";
 import { useAppSelector, useRestaurantDetailQuery } from "hooks";
 import { useAppNavigation } from "navigators";
 import React, { useLayoutEffect, useState } from "react";
-import { ActivityIndicator, NativeScrollPoint, View } from "react-native";
+import { ActivityIndicator, Animated, NativeScrollPoint, View } from "react-native";
 import { selectLocation } from "store/slices/LocationSlice";
 import * as Components from "./components";
 import { style } from "theme";
@@ -24,10 +24,7 @@ export const StoreScreen = ({ route }: Props) => {
     navigation.setOptions({ headerShown: false });
   }, []);
 
-  const [scrollOffSet, setScrollOffSet] = useState<NativeScrollPoint>({
-    x: 0,
-    y: 0,
-  });
+  const scrollY = React.useRef(new Animated.Value(0)).current;
 
   if (isLoading) {
     return (
@@ -47,11 +44,8 @@ export const StoreScreen = ({ route }: Props) => {
 
   return (
     <Layout>
-      <Components.SHeader scrollPoint={scrollOffSet} restaurant={restaurant} />
-      <Components.SBody
-        onScroll={(event) => setScrollOffSet(event.nativeEvent.contentOffset)}
-        restaurant={restaurant}
-      />
+      <Components.SHeader scrollY={scrollY} restaurant={restaurant} />
+      <Components.SBody scrollY={scrollY} restaurant={restaurant} />
       <Components.SCartFloating restaurant={restaurant} />
     </Layout>
   );

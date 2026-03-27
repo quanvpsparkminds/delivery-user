@@ -2,7 +2,7 @@ import { images } from "@assets/index";
 import { AppText } from "components";
 import React, { useState } from "react";
 import {
-  FlatList,
+  Animated,
   Image,
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -29,10 +29,10 @@ import { TRestaurant } from "services";
 import { getImage } from "utils/Image";
 
 type Props = {
-  onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  scrollY: Animated.Value;
   restaurant: TRestaurant;
 };
-export const SBody: React.FC<Props> = ({ onScroll, restaurant }) => {
+export const SBody: React.FC<Props> = ({ scrollY, restaurant }) => {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector(selectCartItems);
   const [infoHeight, setInfoHeight] = useState<number>(100);
@@ -47,11 +47,15 @@ export const SBody: React.FC<Props> = ({ onScroll, restaurant }) => {
   };
 
   return (
-    <ScrollView
+    <Animated.ScrollView
       style={[$root, { bottom }]}
       contentContainerStyle={style.gap_sm}
       showsVerticalScrollIndicator={false}
-      onScroll={onScroll}
+      scrollEventThrottle={16}
+      onScroll={Animated.event(
+        [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+        { useNativeDriver: true },
+      )}
     >
       <View
         style={{ marginTop: IMAGE_HEADER - infoHeight * 0.5 - spacing.sm }}
@@ -78,19 +82,11 @@ export const SBody: React.FC<Props> = ({ onScroll, restaurant }) => {
           </View>
         </View>
       </View>
-      <View style={$box}>
-        <AppText style={$txDeli}>CRAZY WEDNESDAY</AppText>
-        <AppText>Get $4 off any order of $40 or more from this store</AppText>
-      </View>
+
       <AppText style={$txDeli}>Menu</AppText>
-      <FlatList
-        data={restaurant.menu}
-        numColumns={2}
-        contentContainerStyle={[style.gap_md]}
-        columnWrapperStyle={style.gap_md}
-        scrollEnabled={false}
-        renderItem={({ item }) => (
-          <View style={$dish}>
+      <View style={[style.row_wrap, style.gap_md]}>
+        {restaurant.menu?.map((item) => (
+          <View key={item.id} style={$dish}>
             <View style={style.center}>
               {item.image ? (
                 <Image
@@ -144,14 +140,16 @@ export const SBody: React.FC<Props> = ({ onScroll, restaurant }) => {
               {item.price}
             </AppText>
           </View>
-        )}
-      />
-    </ScrollView>
+        ))}
+      </View>
+      <View style={{ height: spacing.lg }} />
+    </Animated.ScrollView>
   );
 };
 
-const ITEM_WIDTH = (spacing.screenWidth - spacing.md * 2) / 2;
+const ITEM_WIDTH = (spacing.screenWidth - spacing.md * 2) / 2 - 10;
 const $root: SViewStyle = [
+  style.flex_1,
   style.abs,
   style.px_md,
   { top: 0, right: 0, left: 0 },

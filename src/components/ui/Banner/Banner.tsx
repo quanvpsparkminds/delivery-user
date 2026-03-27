@@ -20,9 +20,9 @@ export const Banner = () => {
   const address = useAppSelector(selectAddress);
 
   const handleSearch = () => {
-    navigation.navigate("AppTabbar", {
-      screen: "Search",
-    });
+    // navigation.navigate("AppTabbar", {
+    //   screen: "Search",
+    // });
   };
 
   const { data: notifications } = useNotificationQuery();
@@ -50,9 +50,9 @@ export const Banner = () => {
             </View>
           )}
         </Pressable>
-        <Pressable style={$rounded} onPress={handleCart}>
+        {/* <Pressable style={$rounded} onPress={handleCart}>
           <Image source={images.icon_cart} />
-        </Pressable>
+        </Pressable> */}
       </View>
       <Carousel
         width={spacing.screenWidth}
